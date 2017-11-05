@@ -35,6 +35,8 @@
     "npm": "~3.10.5"
   },
   "devDependencies": {
+    "@angular/common": "2.0.0",
+    "@angular/compiler": "2.0.0",
     "@angular/cli": "1.4.4",
     "@angular/compiler-cli": "^4.2.4",
     "@angular/language-service": "^4.2.4",
