@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   /**
    * @type {LoginForm} The object that is being transformed.
    */
-  private model: LoginForm = new LoginForm();
+  model: LoginForm = new LoginForm();
 
   /**
    * The message to display on the front page to show feedback.

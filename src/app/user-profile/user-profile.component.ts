@@ -11,7 +11,7 @@ export class UserProfileComponent implements OnInit {
   /**
    * The current user.
    */
-  private user: User;
+  user: User;
 
   constructor(@Inject(LOGGED_IN_USER_PROVIDER) private userProvider: LoggedInUserProvider) {
   }

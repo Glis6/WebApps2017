@@ -11,7 +11,7 @@ export class RegistrationComponent {
   /**
    * @type {RegistrationForm} The object that is being transformed.
    */
-  private model: RegistrationForm = new RegistrationForm();
+  model: RegistrationForm = new RegistrationForm();
 
   /**
    * A message displaying what is happening.

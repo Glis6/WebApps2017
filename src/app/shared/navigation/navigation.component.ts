@@ -12,7 +12,7 @@ export class NavigationComponent implements OnInit {
   /**
    * The currently logged in user.
    */
-  private user: User;
+  user: User;
 
   /**
    * @param {LoginService} loginService The loginService to use.

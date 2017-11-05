@@ -5,7 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {AngularFireModule} from "angularfire2";
 import {AngularFireAuthModule} from "angularfire2/auth";
 import {AngularFirestoreModule} from "angularfire2/firestore";
-import {environment} from "../environments/environment";
+import {environment} from "../environments/environment.prod";
 
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
@@ -19,7 +19,6 @@ import {LOGGED_IN_USER_PROVIDER} from "./shared/services/user-provider.service";
 import {USER_SERVICE} from "./shared/services/user.service";
 import { HomeComponent } from './home/home.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { EditCharactersComponent } from './edit-characters/edit-characters.component';
 import {CLASS_SERVICE} from "./shared/services/class.service";
 import {LocalClassService} from "./shared/services/local-class.service";
 
@@ -44,10 +43,6 @@ export const appRoutes: Routes = [
     path: 'profile',
     component: UserProfileComponent
   },
-  {
-    path: 'profile/characters/edit',
-    component: EditCharactersComponent
-  },
 ];
 
 @NgModule({
@@ -57,8 +52,7 @@ export const appRoutes: Routes = [
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    UserProfileComponent,
-    EditCharactersComponent
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
