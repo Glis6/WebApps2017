@@ -17,7 +17,7 @@
 <ng-template #userLoggedIn>
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <a class="nav-link">Hello, {{ user.displayName }}</a>
+      <a class="nav-link" routerLink="/profile">Hello, {{ user.displayName }}</a>
     </li>
     <div *ngIf="true; then defaultHeader"></div>
     <li class="nav-item">

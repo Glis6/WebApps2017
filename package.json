@@ -2,6 +2,7 @@
   "name": "web-apps2017",
   "version": "0.0.0",
   "license": "MIT",
+  "main": "app.js";
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,9 +24,15 @@
     "@angular/router": "^4.2.4",
     "angularfire2": "^5.0.0-rc.3",
     "core-js": "^2.4.1",
+    "express": "^4.16.2",
     "firebase": "^4.6.0",
     "rxjs": "^5.4.2",
-    "zone.js": "^0.8.14"
+    "zone.js": "^0.8.14",
+    "postinstall": "grunt ng build --aot -prod"
+  },
+  "engines": {
+    "node": "~6.10.3",
+    "npm": "~3.10.5"
   },
   "devDependencies": {
     "@angular/cli": "1.4.4",

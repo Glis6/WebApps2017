@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule, Routes} from "@angular/router";
 import {AngularFireModule} from "angularfire2";
@@ -19,6 +19,9 @@ import {LOGGED_IN_USER_PROVIDER} from "./shared/services/user-provider.service";
 import {USER_SERVICE} from "./shared/services/user.service";
 import { HomeComponent } from './home/home.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { EditCharactersComponent } from './edit-characters/edit-characters.component';
+import {CLASS_SERVICE} from "./shared/services/class.service";
+import {LocalClassService} from "./shared/services/local-class.service";
 
 export const appRoutes: Routes = [
   {
@@ -37,6 +40,14 @@ export const appRoutes: Routes = [
     path: 'register',
     component: RegistrationComponent
   },
+  {
+    path: 'profile',
+    component: UserProfileComponent
+  },
+  {
+    path: 'profile/characters/edit',
+    component: EditCharactersComponent
+  },
 ];
 
 @NgModule({
@@ -46,7 +57,8 @@ export const appRoutes: Routes = [
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    EditCharactersComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +66,7 @@ export const appRoutes: Routes = [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    ReactiveFormsModule,
     // Keep this one last
     RouterModule.forRoot(appRoutes)
   ],
@@ -62,6 +75,7 @@ export const appRoutes: Routes = [
     {provide: REGISTRATION_SERVICE, useClass: AuthenticationService},
     {provide: LOGGED_IN_USER_PROVIDER, useClass: AuthenticationService},
     {provide: USER_SERVICE, useClass: UserDatabaseService},
+    {provide: CLASS_SERVICE, useClass: LocalClassService},
   ],
   bootstrap: [AppComponent]
 })
