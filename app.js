@@ -1,10 +1,8 @@
 const express = require('express');
-const http = require('http');
+const app = express();
 const path = require('path');
 
-const app = express();
-
-const forceSSL = function () {
+const forceSSL = function() {
   return function (req, res, next) {
     if (req.headers['x-forwarded-proto'] !== 'https') {
       return res.redirect(
@@ -15,17 +13,11 @@ const forceSSL = function () {
   }
 };
 
+// ForceSSL middleware
 app.use(forceSSL());
+app.use(express.static(__dirname + '/dist'));
+app.listen(process.env.PORT || 8080);
 
-app.get('/*', function (req, res) {
+app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname + '/dist/index.html'));
-});
-
-const port = process.env.PORT || '3001';
-app.set('port', port);
-
-const server = http.createServer(app);
-
-server.listen(port, function () {
-  console.log('Server is live!');
 });
