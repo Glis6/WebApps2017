@@ -1,18 +1,12 @@
 import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule, Routes} from "@angular/router";
-import {AngularFireModule} from "angularfire2";
-import {AngularFireAuthModule} from "angularfire2/auth";
-import {AngularFirestoreModule} from "angularfire2/firestore";
-import {environment} from "../environments/environment";
 
 import {AppComponent} from './app.component';
+import {HomeComponent} from './public/home/home.component';
 import {NavigationComponent} from './shared/navigation/navigation.component';
-import { HomeComponent } from './home/home.component';
-import {CanvasComponent} from "./canvas/canvas.component";
-import {ColorPickerComponent} from "./canvas/color-picker.component";
-import {WidthPickerComponent} from "./canvas/width-picker.component";
+import {SharedModule} from "./shared/shared.module";
+import {PublicModule} from "./public/public.module";
+import {BrowserModule} from "@angular/platform-browser";
 
 export const appRoutes: Routes = [
   {
@@ -29,18 +23,11 @@ export const appRoutes: Routes = [
   declarations: [
     AppComponent,
     NavigationComponent,
-    HomeComponent,
-    CanvasComponent,
-    ColorPickerComponent,
-    WidthPickerComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    ReactiveFormsModule,
+    SharedModule,
+    PublicModule,
     // Keep this one last
     RouterModule.forRoot(appRoutes)
   ],

@@ -1,10 +1,12 @@
-import {Component, Input, ElementRef, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, Input, ElementRef, AfterViewInit, ViewChild, Inject} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/switchMap';
+import {DRAWING_SERVICE, DrawingService} from "../../shared/services/canvas.service";
+import {Drawing} from "../../shared/models/drawing.class";
 
 @Component({
   selector: 'app-canvas',
@@ -13,6 +15,7 @@ import 'rxjs/add/operator/switchMap';
     <app-color-picker (color)="changeColor($event)"></app-color-picker>
     <app-width-picker (number)="changeWidth($event)"></app-width-picker>
     <button (click)="clearCanvas()">Clear</button>
+    <button (click)="save()">Save</button>
   `,
   styles: [`
     canvas {
@@ -48,6 +51,9 @@ export class CanvasComponent implements AfterViewInit {
    * The rendering context to draw the canvas.
    */
   private renderingContext: CanvasRenderingContext2D;
+
+  constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService) {
+  }
 
   /**
    * Links the canvas to the rendering engine.
@@ -109,6 +115,10 @@ export class CanvasComponent implements AfterViewInit {
       this.renderingContext.lineTo(currentPos.x, currentPos.y);
       this.renderingContext.stroke();
     }
+  }
+
+  save() {
+    this.drawingService.saveDrawing(new Drawing('Test', 'Gilles', this.renderingContext.canvas.toDataURL()));
   }
 
   /**
