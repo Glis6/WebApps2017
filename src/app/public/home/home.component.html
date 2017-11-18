@@ -1,1 +1,9 @@
 <app-canvas></app-canvas>
+
+<ul>
+  <li *ngFor="let drawing of drawings | async">
+    <p>{{drawing.name}} by {{drawing.author}}</p>
+    <img [src]="drawing.canvas"/>
+    <span *ngIf="user"><a (click)="addUpVote(drawing, user)">^ {{ drawing.upVotes }}</a> | <a (click)="addDownVote(drawing, user)">v {{ drawing.downVotes }}</a></span>
+  </li>
+</ul>

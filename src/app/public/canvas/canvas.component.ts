@@ -7,6 +7,7 @@ import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/switchMap';
 import {DRAWING_SERVICE, DrawingService} from "../../shared/services/canvas.service";
 import {Drawing} from "../../shared/models/drawing.class";
+import {Rating} from "../../shared/models/rating.class";
 
 @Component({
   selector: 'app-canvas',
@@ -118,7 +119,7 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   save() {
-    this.drawingService.saveDrawing(new Drawing('Test', 'Gilles', this.renderingContext.canvas.toDataURL()));
+    this.drawingService.createDrawing(new Drawing('Test', 'Gilles', this.renderingContext.canvas.toDataURL(), new Rating())).subscribe(() => {});
   }
 
   /**

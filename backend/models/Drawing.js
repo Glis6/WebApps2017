@@ -1,9 +1,20 @@
 let mongoose = require('mongoose');
 
-let DrawingSchema = new mongoose.Schema({
-  name: String,
-  author: String,
-  canvas: String
+let Vote = new mongoose.Schema({
+  userId: String,
+  timestamp: Date
 });
 
-mongoose.model('Drawing', DrawingSchema);
+let Rating = new mongoose.Schema({
+  upVotes: [Vote],
+  downVotes: [Vote]
+});
+
+let Drawing = new mongoose.Schema({
+  name: String,
+  author: String,
+  canvas: String,
+  rating: Rating
+});
+
+mongoose.model('Drawing', Drawing);
