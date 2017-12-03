@@ -34,20 +34,20 @@ export class Rating {
     this._downVotes.push(vote);
   }
 
-  removeUpVote(userId: string) {
-    this._upVotes = this._upVotes.filter(vote => vote.userId != userId);
+  removeUpVote(user: string) {
+    this._upVotes = this._upVotes.filter(vote => vote.user != user);
   }
 
-  removeDownVote(userId: string) {
-    this._downVotes = this._downVotes.filter(vote => vote.userId != userId);
+  removeDownVote(user: string) {
+    this._downVotes = this._downVotes.filter(vote => vote.user != user);
   }
 
-  hasUpVoted(userId: string): boolean {
-    return this._upVotes.filter(value => value.userId == userId).length > 0;
+  hasUpVoted(user: string): boolean {
+    return this._upVotes.filter(value => value.user == user).length > 0;
   }
 
-  hasDownVoted(userId: string): boolean {
-    return this._downVotes.filter(value => value.userId == userId).length > 0;
+  hasDownVoted(user: string): boolean {
+    return this._downVotes.filter(value => value.user == user).length > 0;
   }
 
   /**

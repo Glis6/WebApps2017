@@ -8,16 +8,16 @@ export class Vote {
    * Loads an instance of the object from JSON.
    */
   static fromJSON(json): Vote {
-    const rec = new Vote(json.userId, json.timestamp);
+    const rec = new Vote(json.user, json.timestamp);
     rec._id = json._id;
     return rec;
   }
 
-  constructor(private _userId: string, private _timestamp: Date) {
+  constructor(private _user: string, private _timestamp: Date) {
   }
 
-  get userId(): string {
-    return this._userId;
+  get user(): string {
+    return this._user;
   }
 
   get timestamp(): Date {
@@ -30,7 +30,7 @@ export class Vote {
   toJSON() {
     return {
       _id: this._id,
-      userId: this._userId,
+      user: this._user,
       timestamp: this._timestamp,
     };
   }

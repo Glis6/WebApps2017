@@ -29,6 +29,16 @@
       }
     }
   ],
+  "styles": [
+    "../node_modules/bootstrap/scss/bootstrap.scss",
+    "assets/scss/main.scss",
+    "../node_modules/font-awesome/css/font-awesome.css"
+  ],
+  "scripts": [
+    "../node_modules/jquery/dist/jquery.min.js",
+    "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+    "../node_modules/tether/dist/js/tether.js"
+  ],
   "e2e": {
     "protractor": {
       "config": "./protractor.conf.js"

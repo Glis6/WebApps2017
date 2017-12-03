@@ -1,5 +1,6 @@
 import {Rating} from "./rating.class";
 import {Vote} from "./vote.class";
+import {Comment} from "./comment.class";
 
 export class Drawing {
   /**
@@ -11,7 +12,7 @@ export class Drawing {
    * Loads an instance of the object from JSON.
    */
   static fromJSON(json): Drawing {
-    const rec = new Drawing(json.name, json.author, json.canvas, Rating.fromJSON(json.rating));
+    const rec = new Drawing(json.name, json.author, json.canvas, Rating.fromJSON(json.rating), json.comments.map(comment => Comment.fromJSON(comment)));
     rec._id = json._id;
     return rec;
   }
@@ -20,9 +21,10 @@ export class Drawing {
    * @param {string} _name The name of the drawing.
    * @param {string} _author The author of the drawing.
    * @param {string} _canvas The canvas the drawing was made on.
-   * @param _rating The rating for this image.
+   * @param _rating The rating for this drawing.
+   * @param _comments The comments for this drawing.
    */
-  constructor(private _name: string, private _author: string, private _canvas: string, private _rating: Rating) {
+  constructor(private _name: string, private _author: string, private _canvas: string, private _rating: Rating = new Rating(), private _comments: Comment[] = []) {
   }
 
   get id(): string {
@@ -58,6 +60,7 @@ export class Drawing {
     return this._rating.downVotes || 0;
   }
 
+  /* VOTES */
   addUpVote(vote: Vote) {
     this._rating.addUpVote(vote);
   }
@@ -82,6 +85,17 @@ export class Drawing {
     return this._rating.hasDownVoted(userId);
   }
 
+  /* COMMENTS */
+  addComment(comment: Comment) {
+    return this._comments.push(comment);
+  }
+
+  removeComment(commentId: string) {
+    const index = this._comments.findIndex(commentInList => commentInList.id == commentId);
+    if(index >= 0)
+      this._comments.splice(index, 1);
+  }
+
   /**
    * Converts the object to JSON.
    */
@@ -91,7 +105,8 @@ export class Drawing {
       name: this._name,
       author: this._author,
       canvas: this._canvas,
-      rating: this._rating.toJSON()
+      rating: this._rating.toJSON(),
+      comments: this._comments.map(comment => comment.toJSON()),
     };
   }
 }

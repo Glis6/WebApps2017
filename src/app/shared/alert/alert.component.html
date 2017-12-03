@@ -1,0 +1,22 @@
+<div *ngIf="alert | async as alert" class="modal" tabindex="-1" role="dialog" style="display:block!important">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-center">{{alert.message}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-center">
+              <a *ngFor="let option of alert.options" (click)="option.onClick()">
+                <button class="btn btn-pm">{{option.label}}</button>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

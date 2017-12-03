@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 let Vote = new mongoose.Schema({
-  userId: String,
+  user: String,
   timestamp: Date
 });
 
@@ -10,11 +10,18 @@ let Rating = new mongoose.Schema({
   downVotes: [Vote]
 });
 
+let Comment = new mongoose.Schema({
+  comment: [String],
+  user: String,
+  rating: Rating
+});
+
 let Drawing = new mongoose.Schema({
   name: String,
   author: String,
   canvas: String,
-  rating: Rating
+  rating: Rating,
+  comments: [Comment]
 });
 
 mongoose.model('Drawing', Drawing);

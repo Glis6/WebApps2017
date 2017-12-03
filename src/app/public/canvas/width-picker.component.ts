@@ -15,7 +15,7 @@ export class WidthPickerComponent {
   /**
    * The number that is currently picked.
    */
-  private currentNumber: number;
+  public currentNumber: number;
 
   /**
    * Applies the number after picking.

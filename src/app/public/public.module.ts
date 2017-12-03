@@ -6,6 +6,7 @@ import {ColorPickerComponent} from "./canvas/color-picker.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {HomeComponent} from "./home/home.component";
+import {ViewDrawingComponent} from "./view-drawing/view-drawing.component";
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import {HomeComponent} from "./home/home.component";
     CanvasComponent,
     ColorPickerComponent,
     WidthPickerComponent,
-    HomeComponent
+    HomeComponent,
+    ViewDrawingComponent
   ]
 })
 export class PublicModule { }

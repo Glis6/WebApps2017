@@ -1,21 +1,21 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {Drawing} from "../../shared/models/drawing.class";
 import {DRAWING_SERVICE, DrawingService} from "../../shared/services/canvas.service";
-import {Vote} from "../../shared/models/vote.class";
-import {LOGGED_IN_USER_SERVICE, LoggedInUserService} from "../../shared/services/logged-in-user.service";
+import {ActivatedRoute} from "@angular/router";
+import {Drawing} from "../../shared/models/drawing.class";
 import {User} from "../../shared/models/user.class";
+import {LOGGED_IN_USER_SERVICE, LoggedInUserService} from "../../shared/services/logged-in-user.service";
+import {Vote} from "../../shared/models/vote.class";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-view-drawing',
+  templateUrl: './view-drawing.component.html',
+  styleUrls: ['./view-drawing.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ViewDrawingComponent implements OnInit {
   /**
-   * All drawings to display on the home page.
+   * The drawing to display.
    */
-  public drawings: Observable<Drawing[]>;
+  public drawing: Drawing;
 
   /**
    * The currently logged in user.
@@ -23,12 +23,18 @@ export class HomeComponent implements OnInit {
   public user: User;
 
   constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService,
-              @Inject(LOGGED_IN_USER_SERVICE) private loggedInUserService: LoggedInUserService) {
+              @Inject(LOGGED_IN_USER_SERVICE) private userProvider: LoggedInUserService,
+              private route: ActivatedRoute) {
   }
 
+  /**
+   * Links the drawing.
+   */
   ngOnInit() {
-    this.drawings = this.drawingService.getAll();
-    this.loggedInUserService.user.subscribe(user => this.user = user);
+    this.userProvider.user.subscribe(user => this.user = user);
+    this.route.queryParams.subscribe(params => this.drawingService
+        .getDrawing(params.get('drawingId'))
+        .subscribe(drawing => this.drawing = drawing));
   }
 
   addUpVote(drawing: Drawing) {

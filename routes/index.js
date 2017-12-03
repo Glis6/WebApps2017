@@ -29,11 +29,12 @@ router.get('/API/drawings/', function (req, res, next) {
 });
 
 router.post('/API/drawings/create', function (req, res, next) {
-  let drawing = new Drawing({
+  const drawing = new Drawing({
     name: req.body.name,
     author: req.body.author,
     canvas: req.body.canvas,
-    rating: req.body.rating
+    rating: [],
+    comments: []
   });
   drawing.save(function (err, post) {
     if (err) {
@@ -43,8 +44,10 @@ router.post('/API/drawings/create', function (req, res, next) {
   });
 });
 
+/* RATING */
+
 router.post('/API/drawings/:drawing/upvote/add', function (req, res, next) {
-  let drawing = req.drawing;
+  const drawing = req.drawing;
   drawing.rating.upVotes.push(req.body);
   drawing.save(function (err, post) {
     if (err) {
@@ -55,9 +58,9 @@ router.post('/API/drawings/:drawing/upvote/add', function (req, res, next) {
 });
 
 router.post('/API/drawings/:drawing/upvote/remove', function (req, res, next) {
-  let drawing = req.drawing;
+  const drawing = req.drawing;
   drawing.rating.upVotes = drawing.rating.upVotes.filter(function (vote) {
-    return vote.userId != req.body.userId;
+    return vote.user != req.body.user;
   });
   drawing.save(function (err, post) {
     if (err) {
@@ -69,7 +72,7 @@ router.post('/API/drawings/:drawing/upvote/remove', function (req, res, next) {
 ;
 
 router.post('/API/drawings/:drawing/downvote/add', function (req, res, next) {
-  let drawing = req.drawing;
+  const drawing = req.drawing;
   drawing.rating.downVotes.push(req.body);
   drawing.save(function (err, post) {
     if (err) {
@@ -80,9 +83,35 @@ router.post('/API/drawings/:drawing/downvote/add', function (req, res, next) {
 });
 
 router.post('/API/drawings/:drawing/downvote/remove', function (req, res, next) {
-  let drawing = req.drawing;
+  const drawing = req.drawing;
   drawing.rating.downVotes = drawing.rating.downVotes.filter(function (vote) {
-    return vote.userId != req.body.userId;
+    return vote.user != req.body.user;
+  });
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(req.body);
+  });
+});
+
+/* COMMENTS */
+
+router.post('/API/drawings/:drawing/comment/add', function (req, res, next) {
+  const drawing = req.drawing;
+  drawing.comments.push(req.body);
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(req.body);
+  });
+});
+
+router.post('/API/drawings/:drawing/comment/remove', function (req, res, next) {
+  const drawing = req.drawing;
+  drawing.comments = drawing.comments.filter(function (comment) {
+    return comment.user != req.body.comment;
   });
   drawing.save(function (err, post) {
     if (err) {

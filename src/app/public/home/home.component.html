@@ -2,7 +2,7 @@
 
 <ul>
   <li *ngFor="let drawing of drawings | async">
-    <p>{{drawing.name}} by {{drawing.author}}</p>
+    <h4>{{drawing.name}} by {{drawing.author}}</h4>
     <img [src]="drawing.canvas"/>
     <span *ngIf="user"><a (click)="addUpVote(drawing, user)">^ {{ drawing.upVotes }}</a> | <a (click)="addDownVote(drawing, user)">v {{ drawing.downVotes }}</a></span>
   </li>

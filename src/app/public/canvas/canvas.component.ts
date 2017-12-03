@@ -119,7 +119,7 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   save() {
-    this.drawingService.createDrawing(new Drawing('Test', 'Gilles', this.renderingContext.canvas.toDataURL(), new Rating())).subscribe(() => {});
+    this.drawingService.createDrawing(new Drawing('Test', 'Gilles', this.renderingContext.canvas.toDataURL())).subscribe(() => {});
   }
 
   /**

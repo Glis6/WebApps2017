@@ -15,7 +15,7 @@ export class ColorPickerComponent {
   /**
    * The color code that is currently picked.
    */
-  private colorCode: string;
+  public colorCode: string;
 
   /**
    * Applies the color after picking.
