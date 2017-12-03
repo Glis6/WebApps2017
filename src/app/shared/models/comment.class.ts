@@ -10,9 +10,16 @@ export class Comment {
 
   private _id: string;
 
-  constructor(private _user: string, private _comment: string, private _rating: Rating) {
+  constructor(private _user: string, private _comment: string, private _rating: Rating = new Rating) {
   }
 
+  get upVotes(): number {
+    return this._rating.upVotes || 0;
+  }
+
+  get downVotes(): number {
+    return this._rating.downVotes || 0;
+  }
 
   get user(): string {
     return this._user;

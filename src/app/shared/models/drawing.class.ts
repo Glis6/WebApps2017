@@ -60,6 +60,10 @@ export class Drawing {
     return this._rating.downVotes || 0;
   }
 
+  get comments(): Comment[] {
+    return this._comments;
+  }
+
   /* VOTES */
   addUpVote(vote: Vote) {
     this._rating.addUpVote(vote);

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {Drawing} from "../../shared/models/drawing.class";
-import {DRAWING_SERVICE, DrawingService} from "../../shared/services/canvas.service";
+import {DRAWING_SERVICE, DrawingService} from "../../shared/services/drawing.service";
 import {Vote} from "../../shared/models/vote.class";
 import {LOGGED_IN_USER_SERVICE, LoggedInUserService} from "../../shared/services/logged-in-user.service";
 import {User} from "../../shared/models/user.class";

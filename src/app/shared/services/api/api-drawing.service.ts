@@ -1,4 +1,4 @@
-import {DrawingService} from "../canvas.service";
+import {DrawingService} from "../drawing.service";
 import {Observable} from "rxjs/Observable";
 import {Drawing} from "../../models/drawing.class";
 import {Http} from '@angular/http';
@@ -31,12 +31,14 @@ export class ApiDrawingService implements DrawingService {
   }
 
   /* VOTES */
-
   addUpVote(drawing: Drawing, vote: Vote): Observable<Vote> {
-    drawing.addUpVote(vote);
     return this.http.post(`${this._appUrl}/${drawing.id}/upvote/add`, vote.toJSON())
       .map(result => result.json())
-      .map(item => Vote.fromJSON(item));
+      .map(item => {
+        const vote = Vote.fromJSON(item);
+        drawing.addUpVote(vote);
+        return vote;
+      });
   }
 
   addDownVote(drawing: Drawing, vote: Vote): Observable<Vote> {
@@ -47,51 +49,65 @@ export class ApiDrawingService implements DrawingService {
   }
 
   removeUpVote(drawing: Drawing, userId: string): Observable<void> {
-    drawing.removeUpVote(userId);
-    return this.http.post(`${this._appUrl}/${drawing.id}/upvote/remove`, {user: userId}).map(() => {});
+    return this.http.post(`${this._appUrl}/${drawing.id}/upvote/remove`, {user: userId}).map(() => {
+      drawing.removeUpVote(userId);
+    });
   }
 
   removeDownVote(drawing: Drawing, userId: string): Observable<void> {
-    drawing.removeDownVote(userId);
-    return this.http.post(`${this._appUrl}/${drawing.id}/downvote/remove`, {user: userId}).map(() => {});
+    return this.http.post(`${this._appUrl}/${drawing.id}/downvote/remove`, {user: userId}).map(() => {
+      drawing.removeDownVote(userId);
+    });
   }
 
   /* COMMENTS */
   addComment(drawing: Drawing, comment: Comment): Observable<Comment> {
-    drawing.addComment(comment);
     return this.http.post(`${this._appUrl}/${drawing.id}/comment/add`, comment.toJSON())
       .map(result => result.json())
-      .map(item => Comment.fromJSON(item));
+      .map(item => {
+        const comment: Comment = Comment.fromJSON(item);
+        drawing.addComment(comment);
+        return comment;
+      });
   }
 
   removeComment(drawing: Drawing, commentId: string): Observable<void> {
-    drawing.removeComment(commentId);
-    return this.http.post(`${this._appUrl}/${drawing.id}/comment/remove`, {comment: commentId}).map(() => {})
+    return this.http.post(`${this._appUrl}/${drawing.id}/comment/remove`, {comment: commentId}).map(() => {
+      drawing.removeComment(commentId);
+    })
   }
 
   addCommentUpVote(drawing: Drawing, comment: Comment, vote: Vote): Observable<Vote> {
-    comment.addUpVote(vote);
-    return this.http.post(`${this._appUrl}/${drawing.id}/comment/upvote/add`, vote.toJSON())
+    return this.http.post(`${this._appUrl}/${drawing.id}/comment/${comment.id}/upvote/add`, vote.toJSON())
       .map(result => result.json())
-      .map(item => Vote.fromJSON(item));
+      .map(item => {
+        const vote: Vote = Vote.fromJSON(item);
+        comment.addUpVote(vote);
+        return vote;
+      });
   }
 
   removeCommentUpVote(drawing: Drawing, comment: Comment, userId: string): Observable<void> {
-    comment.removeUpVote(userId);
-    return this.http.post(`${this._appUrl}/${drawing.id}/comment/upvote/remove`, {user: userId})
-      .map(() => {});
+    return this.http.post(`${this._appUrl}/${drawing.id}/comment/${comment.id}/upvote/remove`, {user: userId})
+      .map(() => {
+        comment.removeUpVote(userId);
+      });
   }
 
   addCommentDownVote(drawing: Drawing, comment: Comment, vote: Vote): Observable<Vote> {
-    comment.addDownVote(vote);
-    return this.http.post(`${this._appUrl}/${drawing.id}/comment/downvote/add`, vote.toJSON())
+    return this.http.post(`${this._appUrl}/${drawing.id}/comment/${comment.id}/downvote/add`, vote.toJSON())
       .map(result => result.json())
-      .map(item => Vote.fromJSON(item));
+      .map(item => {
+        const vote: Vote = Vote.fromJSON(item);
+        comment.addDownVote(vote);
+        return vote;
+      });
   }
 
   removeCommentDownVote(drawing: Drawing, comment: Comment, userId: string): Observable<void> {
-    comment.removeDownVote(userId);
-    return this.http.post(`${this._appUrl}/${drawing.id}/comment/downvote/remove`, {user: userId})
-      .map(() => {});
+    return this.http.post(`${this._appUrl}/${drawing.id}/comment/${comment.id}/downvote/remove`, {user: userId})
+      .map(() => {
+        comment.removeDownVote(userId);
+      });
   }
 }

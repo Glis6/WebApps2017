@@ -17,6 +17,19 @@ router.param('drawing', function (req, res, next, id) {
   });
 });
 
+router.param('comment', function (req, res, next, id) {
+  const drawing = req.drawing;
+  if(!drawing)
+    return;
+  const comments = drawing.comments.filter(function(comment) {
+    return comment._id == id;
+  });
+  if(comments.length <= 0)
+    return next(new Error('Not found ' + id));
+  req.comment = comments[0];
+  return next();
+});
+
 router.get('/API/drawings/:drawing', function (req, res) {
   res.json(req.drawing);
 });
@@ -40,7 +53,7 @@ router.post('/API/drawings/create', function (req, res, next) {
     if (err) {
       return next(err);
     }
-    res.json(drawing);
+    res.json(post);
   });
 });
 
@@ -53,7 +66,7 @@ router.post('/API/drawings/:drawing/upvote/add', function (req, res, next) {
     if (err) {
       return next(err);
     }
-    res.json(req.body);
+    res.json(post.rating.upVotes[post.rating.upVotes.length - 1]);
   });
 });
 
@@ -112,6 +125,58 @@ router.post('/API/drawings/:drawing/comment/remove', function (req, res, next) {
   const drawing = req.drawing;
   drawing.comments = drawing.comments.filter(function (comment) {
     return comment.user != req.body.comment;
+  });
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(req.body);
+  });
+});
+
+router.post('/API/drawings/:drawing/comment/:comment/upvote/add', function (req, res, next) {
+  const drawing = req.drawing;
+  const comment = req.comment;
+  comment.rating.upVotes.push(req.body);
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(req.body);
+  });
+});
+
+router.post('/API/drawings/:drawing/comment/:comment/downvote/add', function (req, res, next) {
+  const drawing = req.drawing;
+  const comment = req.comment;
+  comment.rating.downVotes.push(req.body);
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(req.body);
+  });
+});
+
+router.post('/API/drawings/:drawing/comment/:comment/upvote/remove', function (req, res, next) {
+  const drawing = req.drawing;
+  const comment = req.comment;
+  comment.rating.upVotes = comment.rating.upVotes.filter(function (vote) {
+    return vote.user != req.body.user;
+  });
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(req.body);
+  });
+});
+
+router.post('/API/drawings/:drawing/comment/:comment/downvote/remove', function (req, res, next) {
+  const drawing = req.drawing;
+  const comment = req.comment;
+  comment.rating.downVotes = comment.rating.downVotes.filter(function (vote) {
+    return vote.user != req.body.user;
   });
   drawing.save(function (err, post) {
     if (err) {

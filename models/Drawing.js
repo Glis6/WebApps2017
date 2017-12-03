@@ -11,7 +11,7 @@ let Rating = new mongoose.Schema({
 });
 
 let Comment = new mongoose.Schema({
-  comment: [String],
+  comment: String,
   user: String,
   rating: Rating
 });

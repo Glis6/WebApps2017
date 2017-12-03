@@ -5,7 +5,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/switchMap';
-import {DRAWING_SERVICE, DrawingService} from "../../shared/services/canvas.service";
+import {DRAWING_SERVICE, DrawingService} from "../../shared/services/drawing.service";
 import {Drawing} from "../../shared/models/drawing.class";
 import {Rating} from "../../shared/models/rating.class";
 

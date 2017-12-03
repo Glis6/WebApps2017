@@ -1,5 +1,21 @@
 <div>
-  <h4>{{ drawing.name }} by {{ drawing.author }}</h4>
+  <h4>{{ drawing.name }} by
+    <app-display-user [userId]="drawing.author"></app-display-user>
+  </h4>
   <img [src]="drawing.canvas">
-  <span *ngIf="user"><a (click)="addUpVote(drawing, user)">^ {{ drawing.upVotes }}</a> | <a (click)="addDownVote(drawing, user)">v {{ drawing.downVotes }}</a></span>
+  <span *ngIf="user"><app-rating [downVotes]="drawing.downVotes" [upVotes]="drawing.upVotes"
+                                 (addDownVote)="addDrawingDownVote(drawing)"
+                                 (addUpVote)="addDrawingUpVote(drawing)"></app-rating></span>
+  <div *ngFor="let comment of drawing.comments">
+    <div>
+      {{comment.comment}}
+    </div>
+    <app-display-user [userId]="comment.user"></app-display-user>
+    <span *ngIf="user"><app-rating [downVotes]="comment.downVotes" [upVotes]="comment.upVotes"
+                                   (addDownVote)="addCommentDownVote(drawing, comment)"
+                                   (addUpVote)="addCommentUpVote(drawing, comment)"></app-rating></span>
+  </div>
+  <div *ngIf="user">
+    <app-comment (comment)="addComment($event)"></app-comment>
+  </div>
 </div>

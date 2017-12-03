@@ -7,6 +7,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {HomeComponent} from "./home/home.component";
 import {ViewDrawingComponent} from "./view-drawing/view-drawing.component";
+import {RatingComponent} from "./rating/rating.component";
+import {CommentComponent} from "./write-comment/write-comment.component";
 
 @NgModule({
   imports: [
@@ -20,7 +22,9 @@ import {ViewDrawingComponent} from "./view-drawing/view-drawing.component";
     ColorPickerComponent,
     WidthPickerComponent,
     HomeComponent,
-    ViewDrawingComponent
+    ViewDrawingComponent,
+    RatingComponent,
+    CommentComponent
   ]
 })
 export class PublicModule { }
