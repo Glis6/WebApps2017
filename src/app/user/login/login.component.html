@@ -1,0 +1,16 @@
+<form [formGroup]='form' (ngSubmit)='onSubmit()'>
+  <h3>Login</h3>
+  <app-message></app-message>
+  <div>
+    <label>E-mail address
+      <input type="text" formControlName='emailAddress'>
+    </label>
+  </div>
+  <div>
+    <label>Password
+      <input type="password" formControlName='password'>
+    </label>
+  </div>
+  <a routerLink="/register">Register</a>
+  <button type='submit' [disabled]='form.invalid'>Log in</button>
+</form>

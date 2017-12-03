@@ -1,1 +1,5 @@
-<p>No header yet</p>
+<div *ngIf="user; else notLoggedIn">Hello, {{user.firstName}} <a (click)="logout()">LOG OUT</a></div>
+<ng-template #notLoggedIn>
+  <div routerLink="/login">Log in</div>
+  <div routerLink="/register">Register</div>
+</ng-template>

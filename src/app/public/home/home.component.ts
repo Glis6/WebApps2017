@@ -2,9 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {Drawing} from "../../shared/models/drawing.class";
 import {DRAWING_SERVICE, DrawingService} from "../../shared/services/drawing.service";
-import {Vote} from "../../shared/models/vote.class";
-import {LOGGED_IN_USER_SERVICE, LoggedInUserService} from "../../shared/services/logged-in-user.service";
 import {User} from "../../shared/models/user.class";
+import {AUTHENTICATION_SERVICE, AuthenticationService} from "../../shared/services/authentication.service";
 
 @Component({
   selector: 'app-home',
@@ -23,33 +22,11 @@ export class HomeComponent implements OnInit {
   public user: User;
 
   constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService,
-              @Inject(LOGGED_IN_USER_SERVICE) private loggedInUserService: LoggedInUserService) {
+              @Inject(AUTHENTICATION_SERVICE) private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
     this.drawings = this.drawingService.getAll();
-    this.loggedInUserService.user.subscribe(user => this.user = user);
-  }
-
-  addUpVote(drawing: Drawing) {
-    if(!this.user)
-      return;
-    if(drawing.hasUpVoted(this.user.id))
-      return;
-    if(drawing.hasDownVoted(this.user.id)) {
-      this.drawingService.removeDownVote(drawing, this.user.id).subscribe(() => {});
-    }
-    this.drawingService.addUpVote(drawing, new Vote(this.user.id, new Date)).subscribe(() => {});
-  }
-
-  addDownVote(drawing: Drawing) {
-    if(!this.user)
-      return;
-    if(drawing.hasDownVoted(this.user.id))
-      return;
-    if(drawing.hasUpVoted(this.user.id)) {
-      this.drawingService.removeUpVote(drawing, this.user.id).subscribe(() => {});
-    }
-    this.drawingService.addDownVote(drawing, new Vote(this.user.id, new Date)).subscribe(() => {});
+    this.authenticationService.user.subscribe(user => this.user = user);
   }
 }

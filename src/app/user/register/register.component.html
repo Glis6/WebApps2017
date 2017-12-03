@@ -1,0 +1,22 @@
+<form [formGroup]='form' (ngSubmit)='onSubmit()'>
+  <h3>Register a user</h3>
+  <div>
+    <label>E-mail address
+      <input type="text" formControlName='emailAddress'>
+    </label>
+    {{form.get('emailAddress').errors | json}}
+    <label>Password
+      <input type="password" formControlName='password'>
+    </label>
+    {{form.get('password').errors | json}}
+    <label>First Name
+      <input type="text" formControlName='firstName'>
+    </label>
+    {{form.get('firstName').errors | json}}
+    <label>Last Name
+      <input type="text" formControlName='lastName'>
+    </label>
+    {{form.get('lastName').errors | json}}
+  </div>
+  <button type='submit' [disabled]='form.invalid'>Register</button>
+</form>

@@ -1,4 +1,4 @@
-import {Component, Input, ElementRef, AfterViewInit, ViewChild, Inject} from '@angular/core';
+import {Component, Input, ElementRef, AfterViewInit, ViewChild, Inject, OnInit} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 
 import 'rxjs/add/observable/fromEvent';
@@ -8,6 +8,9 @@ import 'rxjs/add/operator/switchMap';
 import {DRAWING_SERVICE, DrawingService} from "../../shared/services/drawing.service";
 import {Drawing} from "../../shared/models/drawing.class";
 import {Rating} from "../../shared/models/rating.class";
+import {AUTHENTICATION_SERVICE, AuthenticationService} from "../../shared/services/authentication.service";
+import {UserModule} from "../../user/user.module";
+import {User} from "../../shared/models/user.class";
 
 @Component({
   selector: 'app-canvas',
@@ -24,7 +27,7 @@ import {Rating} from "../../shared/models/rating.class";
     }
   `]
 })
-export class CanvasComponent implements AfterViewInit {
+export class CanvasComponent implements OnInit, AfterViewInit {
   /**
    * The canvas itself.
    */
@@ -53,13 +56,27 @@ export class CanvasComponent implements AfterViewInit {
    */
   private renderingContext: CanvasRenderingContext2D;
 
-  constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService) {
+  /**
+   * The user that is currently logged in.
+   */
+  private user: User;
+
+  /**
+   * @param {DrawingService} drawingService The drawingService to save and load the drawing.
+   * @param {AuthenticationService} authenticationService The authenticationService to get the user from.
+   */
+  constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService,
+              @Inject(AUTHENTICATION_SERVICE) private authenticationService: AuthenticationService) {
+  }
+
+  ngOnInit() {
+    this.authenticationService.user.subscribe(user => this.user = user);
   }
 
   /**
    * Links the canvas to the rendering engine.
    */
-  public ngAfterViewInit() {
+  ngAfterViewInit() {
     const canvasElement: HTMLCanvasElement = this.canvas.nativeElement;
     this.renderingContext = canvasElement.getContext('2d');
 
@@ -119,7 +136,9 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   save() {
-    this.drawingService.createDrawing(new Drawing('Test', 'Gilles', this.renderingContext.canvas.toDataURL())).subscribe(() => {});
+    if(this.user) {
+      this.drawingService.createDrawing(new Drawing('Test', this.user.id, this.renderingContext.canvas.toDataURL())).subscribe(() => {});
+    }
   }
 
   /**

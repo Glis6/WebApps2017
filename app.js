@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use('/', index);
-app.use('/user', user);
+app.use('/API/user', user);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler

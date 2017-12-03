@@ -3,9 +3,9 @@ import {DRAWING_SERVICE, DrawingService} from "../../shared/services/drawing.ser
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {Drawing} from "../../shared/models/drawing.class";
 import {User} from "../../shared/models/user.class";
-import {LOGGED_IN_USER_SERVICE, LoggedInUserService} from "../../shared/services/logged-in-user.service";
 import {Vote} from "../../shared/models/vote.class";
 import {Comment} from "../../shared/models/comment.class";
+import {AUTHENTICATION_SERVICE, AuthenticationService} from "../../shared/services/authentication.service";
 
 @Component({
   selector: 'app-view-drawing',
@@ -25,7 +25,7 @@ export class ViewDrawingComponent implements OnInit {
   public user: User;
 
   constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService,
-              @Inject(LOGGED_IN_USER_SERVICE) private userProvider: LoggedInUserService,
+              @Inject(AUTHENTICATION_SERVICE) private authenticationService: AuthenticationService,
               private route: ActivatedRoute) {
   }
 
@@ -33,7 +33,7 @@ export class ViewDrawingComponent implements OnInit {
    * Links the drawing.
    */
   ngOnInit() {
-    this.userProvider.user.subscribe(user => this.user = user);
+    this.authenticationService.user.subscribe(user => this.user = user);
     if(!this.drawing) {
       this.route.queryParams.subscribe((params: ParamMap) => this.drawingService
         .getDrawing(params.get('drawingId'))
