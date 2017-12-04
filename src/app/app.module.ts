@@ -10,6 +10,11 @@ import {BrowserModule} from "@angular/platform-browser";
 import {UserModule} from "./user/user.module";
 import {LoginComponent} from "./user/login/login.component";
 import {RegisterComponent} from "./user/register/register.component";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {PortfolioComponent} from "./drawing/portfolio/portfolio.component";
+import {DrawingModule} from "./drawing/drawing.module";
+import {CreateDrawingComponent} from "./drawing/create-drawing/create-drawing.component";
+import {EditDrawingComponent} from "./drawing/edit-drawing/edit-drawing.component";
 
 export const appRoutes: Routes = [
   {
@@ -27,7 +32,23 @@ export const appRoutes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
-  }
+  },
+  {
+    path: 'portfolio',
+    component: PortfolioComponent
+  },
+  {
+    path: 'portfolio/create',
+    component: CreateDrawingComponent
+  },
+  {
+    path: 'portfolio/edit/:drawingId',
+    component: EditDrawingComponent
+  },
+  {
+    path: '**',
+    component: HomeComponent
+  },
 ];
 
 @NgModule({
@@ -39,7 +60,9 @@ export const appRoutes: Routes = [
     BrowserModule,
     SharedModule,
     PublicModule,
+    DrawingModule,
     UserModule,
+    NgbModule.forRoot(),
     // Keep this one last
     RouterModule.forRoot(appRoutes)
   ],

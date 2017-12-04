@@ -56,8 +56,6 @@ export class ApiAuthenticationService implements AuthenticationService {
         const user: User = User.fromJSON(res.user);
         if (token && user) {
           localStorage.setItem('user', JSON.stringify({_id: user.id, token: token}));
-          console.log("Setting user as ");
-          console.log(user);
           this._user.next(user);
           return true;
         } else {
@@ -73,20 +71,17 @@ export class ApiAuthenticationService implements AuthenticationService {
     }
   }
 
-  register(emailAddress: string, password: string, firstName: string, lastName: string): Observable<boolean> {
+  register(emailAddress: string, password: string, name: string): Observable<boolean> {
     return this.http.post(`${this._url}/register`, {
       emailAddress: emailAddress,
       password: password,
-      firstName: firstName,
-      lastName: lastName
+      name: name
     }).map(res => res.json())
       .map(res => {
         const token = res.token;
         const user: User = User.fromJSON(res.user);
         if (token && user) {
           localStorage.setItem('user', JSON.stringify({_id: user.id, token: token}));
-          console.log("Setting user as ");
-          console.log(user);
           this._user.next(user);
           return true;
         } else {

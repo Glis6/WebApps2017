@@ -2,14 +2,9 @@ let mongoose = require('mongoose');
 let crypto = require('crypto');
 let jwt = require('jsonwebtoken');
 
-let Name = new mongoose.Schema({
-  firstName: String,
-  lastName: String
-});
-
 let UserSchema = new mongoose.Schema({
   emailAddress: {type: String, lowercase: true, unique: true},
-  name: Name,
+  name: String,
   hash: String,
   salt: String
 });

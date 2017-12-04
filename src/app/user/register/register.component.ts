@@ -29,8 +29,7 @@ export class RegisterComponent implements OnInit {
     this.form = this.formBuilder.group({
       emailAddress: ['', [Validators.required, Validators.minLength(4), EmailAddressAvailableValidator.create]],
       password: ['', [Validators.required, Validators.minLength(12), Validators.maxLength(40)]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]]
+      name: ['', [Validators.required]]
     });
   }
 
@@ -43,8 +42,7 @@ export class RegisterComponent implements OnInit {
       this.authenticationService.register(
         this.form.get('emailAddress').value,
         this.form.get('password').value,
-        this.form.get('firstName').value,
-        this.form.get('lastName').value
+        this.form.get('name').value
       ).subscribe(result => {
         if (result) {
           this.router.navigate(['/home']);

@@ -52,6 +52,10 @@ export class Drawing {
     return this._canvas;
   }
 
+  set canvas(canvas: string) {
+    this._canvas = canvas;
+  }
+
   get upVotes(): number {
     return this._rating.upVotes || 0;
   }

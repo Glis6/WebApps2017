@@ -13,6 +13,7 @@ import {ApiAuthenticationService} from "./services/api/api-authentication.servic
 import {AUTHENTICATION_SERVICE} from "./services/authentication.service";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ApiUserService} from "./services/api/api-user.service";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import {ApiUserService} from "./services/api/api-user.service";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule
   ],
   declarations: [
     AlertComponent,
@@ -32,6 +34,7 @@ import {ApiUserService} from "./services/api/api-user.service";
     DisplayUserComponent,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     { provide: DRAWING_SERVICE, useClass: ApiDrawingService },

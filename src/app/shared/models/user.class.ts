@@ -17,7 +17,7 @@ export class User {
    * @param _emailAddress The e-mail address of the user.
    * @param  _name The name of the user.
    */
-  constructor(private _emailAddress: string, private _name: { firstName: string, lastName: string }) {
+  constructor(private _emailAddress: string, private _name: string) {
   }
 
   /**
@@ -30,22 +30,8 @@ export class User {
   /**
    * @returns {string} The full name of the user.
    */
-  get fullName(): string {
-    return this._name.firstName + ' ' + this._name.lastName;
-  }
-
-  /**
-   * @returns {string} The first name of the user.
-   */
-  get firstName(): string {
-    return this._name.firstName;
-  }
-
-  /**
-   * @returns {string} The last name of the user.
-   */
-  get lastName(): string {
-    return this._name.lastName;
+  get name(): string {
+    return this._name;
   }
 
   get id(): string {

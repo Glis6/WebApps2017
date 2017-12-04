@@ -10,7 +10,7 @@ export class CommentComponent implements OnInit {
   /**
    * The form that's being filled in.
    */
-  private form: FormGroup;
+  public form: FormGroup;
 
   /**
    * The comment that has been added to the drawing.
@@ -39,6 +39,7 @@ export class CommentComponent implements OnInit {
   addComment() {
     if(this.form.valid) {
       this.comment.emit(this.form.get('comment').value);
+      this.form.get('comment').reset();
     }
   }
 }

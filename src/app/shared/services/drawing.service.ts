@@ -14,7 +14,11 @@ export interface DrawingService {
 
   getDrawing(id: string): Observable<Drawing>;
 
+  getDrawingsForUser(user: string): Observable<Drawing[]>;
+
   createDrawing(drawing: Drawing): Observable<Drawing>;
+
+  saveDrawing(drawing: Drawing): Observable<Drawing>;
 
   addUpVote(drawing: Drawing, vote: Vote): Observable<Vote>;
 

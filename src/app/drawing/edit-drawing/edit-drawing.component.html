@@ -1,0 +1,3 @@
+<app-message></app-message>
+<app-canvas *ngIf="drawing" [beginCanvas]="drawing.canvas" (canvasUrl)="canvasUrl = $event"></app-canvas>
+<button class="btn btn-info" (click)="saveChanges()">Save changes</button>

@@ -16,7 +16,14 @@ export class ApiDrawingService implements DrawingService {
 
   getDrawing(id: string): Observable<Drawing> {
     return this.http.get(`${this._appUrl}/${id}`)
-      .map(response => response.json()).map(item => Drawing.fromJSON(item));
+      .map(response => response.json())
+      .map(item => Drawing.fromJSON(item));
+  }
+
+  getDrawingsForUser(user: string): Observable<Drawing[]> {
+    return this.http.get(`${this._appUrl}/user/${user}`)
+      .map(response => response.json()
+        .map(item => Drawing.fromJSON(item)));
   }
 
   createDrawing(drawing: Drawing): Observable<Drawing> {
@@ -25,9 +32,16 @@ export class ApiDrawingService implements DrawingService {
       .map(item => Drawing.fromJSON(item));
   }
 
+  saveDrawing(drawing: Drawing): Observable<Drawing> {
+    return this.http.post(`${this._appUrl}/${drawing.id}/save`, drawing.toJSON())
+      .map(result => result.json())
+      .map(item => Drawing.fromJSON(item));
+  }
+
   getAll(): Observable<Drawing[]> {
     return this.http.get(`${this._appUrl}`)
-      .map(response => response.json().map(item => Drawing.fromJSON(item)));
+      .map(response => response.json()
+        .map(item => Drawing.fromJSON(item)));
   }
 
   /* VOTES */
@@ -65,7 +79,11 @@ export class ApiDrawingService implements DrawingService {
     return this.http.post(`${this._appUrl}/${drawing.id}/comment/add`, comment.toJSON())
       .map(result => result.json())
       .map(item => {
+        console.log('Return value: ');
+        console.log(item);
         const comment: Comment = Comment.fromJSON(item);
+        console.log('Comment: ');
+        console.log(comment);
         drawing.addComment(comment);
         return comment;
       });

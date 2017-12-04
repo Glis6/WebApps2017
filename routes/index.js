@@ -41,6 +41,14 @@ router.get('/API/drawings/', function (req, res, next) {
   });
 });
 
+router.get('/API/drawings/user/:user', function (req, res, next) {
+  Drawing.find({ author: req.params.user }, function (err, drawings) {
+    if (err)
+      return next(err);
+    res.json(drawings);
+  });
+});
+
 router.post('/API/drawings/create', function (req, res, next) {
   const drawing = new Drawing({
     name: req.body.name,
@@ -49,6 +57,19 @@ router.post('/API/drawings/create', function (req, res, next) {
     rating: [],
     comments: []
   });
+  drawing.save(function (err, post) {
+    if (err) {
+      return next(err);
+    }
+    res.json(post);
+  });
+});
+
+router.post('/API/drawings/:drawing/save', function (req, res, next) {
+  const drawing = req.drawing;
+  drawing.canvas = req.body.canvas;
+  drawing.author = req.body.author;
+  drawing.name = req.body.name;
   drawing.save(function (err, post) {
     if (err) {
       return next(err);
@@ -112,12 +133,14 @@ router.post('/API/drawings/:drawing/downvote/remove', function (req, res, next) 
 
 router.post('/API/drawings/:drawing/comment/add', function (req, res, next) {
   const drawing = req.drawing;
+  console.log('Comment:');
+  console.log(req.body);
   drawing.comments.push(req.body);
   drawing.save(function (err, post) {
     if (err) {
       return next(err);
     }
-    res.json(req.body);
+    res.json(post.comments[post.comments.length - 1]);
   });
 });
 

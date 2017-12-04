@@ -5,8 +5,8 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-let mongoose = require('mongoose');
-let passport = require('passport');
+var mongoose = require('mongoose');
+var passport = require('passport');
 
 require('./models/Drawing');
 require('./models/User');

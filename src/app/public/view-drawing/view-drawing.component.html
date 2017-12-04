@@ -1,21 +1,61 @@
-<div>
-  <h4>{{ drawing.name }} by
-    <app-display-user [userId]="drawing.author"></app-display-user>
-  </h4>
-  <img [src]="drawing.canvas">
-  <span *ngIf="user"><app-rating [downVotes]="drawing.downVotes" [upVotes]="drawing.upVotes"
-                                 (addDownVote)="addDrawingDownVote(drawing)"
-                                 (addUpVote)="addDrawingUpVote(drawing)"></app-rating></span>
-  <div *ngFor="let comment of drawing.comments">
+<div class="card">
+  <div class="card-header">
     <div>
-      {{comment.comment}}
+      <h4>{{ drawing.name }} by
+        <app-display-user [userId]="drawing.author"></app-display-user>
+      </h4>
+      <div *ngIf="user" class="pull-right">
+        <app-rating [downVotes]="drawing.downVotes" [upVotes]="drawing.upVotes"
+                    (addDownVote)="addDrawingDownVote(drawing)"
+                    (addUpVote)="addDrawingUpVote(drawing)"
+                    [downVoted]="drawing.hasDownVoted(user.id)"
+                    [upVoted]="drawing.hasUpVoted(user.id)"></app-rating>
+      </div>
     </div>
-    <app-display-user [userId]="comment.user"></app-display-user>
-    <span *ngIf="user"><app-rating [downVotes]="comment.downVotes" [upVotes]="comment.upVotes"
-                                   (addDownVote)="addCommentDownVote(drawing, comment)"
-                                   (addUpVote)="addCommentUpVote(drawing, comment)"></app-rating></span>
   </div>
-  <div *ngIf="user">
-    <app-comment (comment)="addComment($event)"></app-comment>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <img [src]="drawing.canvas" class="img-fluid">
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="list-group list-group-flush list-scrollable" *ngIf="drawing.comments.length > 0; else noComments">
+            <div *ngFor="let comment of drawing.comments" class="list-group-item">
+              <div class="card-body">
+                <div class="row col-md-12">
+                  {{comment.comment}}
+                </div>
+                <hr>
+                <div class="row col-md-12">
+                  <div class="col-md-7">
+                    <p><strong><em>Written by</em>
+                      <app-display-user [userId]="comment.user"></app-display-user>
+                    </strong></p>
+                  </div>
+                  <div *ngIf="user" class="col-md-5">
+                    <app-rating [downVotes]="comment.downVotes" [upVotes]="comment.upVotes"
+                                (addDownVote)="addCommentDownVote(drawing, comment)"
+                                (addUpVote)="addCommentUpVote(drawing, comment)"
+                                [downVoted]="comment.hasDownVoted(user.id)"
+                                [upVoted]="comment.hasUpVoted(user.id)"></app-rating>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" *ngIf="user">
+          <app-comment class="card-body" (comment)="addComment($event)"></app-comment>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<ng-template #noComments>
+  <p *ngIf="user">There are no comments yet. Will you leave the first one?</p>
+  <ng-template #notLoggedIn>
+    <p>Log in <a routerLink="/login">here</a> to leave a comment!</p>
+  </ng-template>
+</ng-template>

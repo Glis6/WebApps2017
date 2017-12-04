@@ -1,4 +1,7 @@
-import {Component, Input, ElementRef, AfterViewInit, ViewChild, Inject, OnInit} from '@angular/core';
+import {
+  Component, Input, ElementRef, AfterViewInit, ViewChild, Inject, OnInit, Output,
+  EventEmitter
+} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 
 import 'rxjs/add/observable/fromEvent';
@@ -19,7 +22,6 @@ import {User} from "../../shared/models/user.class";
     <app-color-picker (color)="changeColor($event)"></app-color-picker>
     <app-width-picker (number)="changeWidth($event)"></app-width-picker>
     <button (click)="clearCanvas()">Clear</button>
-    <button (click)="save()">Save</button>
   `,
   styles: [`
     canvas {
@@ -45,6 +47,18 @@ export class CanvasComponent implements OnInit, AfterViewInit {
    */
   @Input()
   public height = 400;
+
+  /**
+   * The canvas URL.
+   */
+  @Output()
+  public canvasUrl: EventEmitter<string> = new EventEmitter<string>();
+
+  /**
+   * The canvas to start with.
+   */
+  @Input()
+  public beginCanvas: string;
 
   /**
    * The background color for the canvas.
@@ -78,6 +92,13 @@ export class CanvasComponent implements OnInit, AfterViewInit {
    */
   ngAfterViewInit() {
     const canvasElement: HTMLCanvasElement = this.canvas.nativeElement;
+    if(this.beginCanvas) {
+      const img = new Image();
+      img.addEventListener("load", function () {
+        canvasElement.getContext("2d").drawImage(img, 0, 0);
+      });
+      img.setAttribute("src", this.beginCanvas);
+    }
     this.renderingContext = canvasElement.getContext('2d');
 
     canvasElement.width = this.width;
@@ -96,26 +117,23 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   private captureEvents(canvasElement: HTMLCanvasElement) {
     Observable
       .fromEvent(canvasElement, 'mousedown')
-      .switchMap((e) => {
-        return Observable
-          .fromEvent(canvasElement, 'mousemove')
-          .takeUntil(Observable.fromEvent(canvasElement, 'mouseup'))
-          .pairwise()
-      })
-      .subscribe((res: [MouseEvent, MouseEvent]) => {
-        const rect = canvasElement.getBoundingClientRect();
-        const prevPos = {
-          x: res[0].clientX - rect.left,
-          y: res[0].clientY - rect.top
-        };
+      .switchMap(() => Observable
+        .fromEvent(canvasElement, 'mousemove')
+        .takeUntil(Observable.fromEvent(canvasElement, 'mouseup'))
+        .pairwise()).subscribe((res: [MouseEvent, MouseEvent]) => {
+      const rect = canvasElement.getBoundingClientRect();
+      const prevPos = {
+        x: res[0].clientX - rect.left,
+        y: res[0].clientY - rect.top
+      };
 
-        const currentPos = {
-          x: res[1].clientX - rect.left,
-          y: res[1].clientY - rect.top
-        };
+      const currentPos = {
+        x: res[1].clientX - rect.left,
+        y: res[1].clientY - rect.top
+      };
 
-        this.drawOnCanvas(prevPos, currentPos);
-      });
+      this.drawOnCanvas(prevPos, currentPos);
+    });
   }
 
   /**
@@ -133,11 +151,12 @@ export class CanvasComponent implements OnInit, AfterViewInit {
       this.renderingContext.lineTo(currentPos.x, currentPos.y);
       this.renderingContext.stroke();
     }
+    this.canvasUrl.emit(this.renderingContext.canvas.toDataURL());
   }
 
   save() {
-    if(this.user) {
-      this.drawingService.createDrawing(new Drawing('Test', this.user.id, this.renderingContext.canvas.toDataURL())).subscribe(() => {});
+    if (this.user) {
+      this.drawingService.createDrawing(new Drawing('Test', this.user.id, this.renderingContext.canvas.toDataURL())).subscribe();
     }
   }
 

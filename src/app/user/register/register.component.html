@@ -9,14 +9,10 @@
       <input type="password" formControlName='password'>
     </label>
     {{form.get('password').errors | json}}
-    <label>First Name
-      <input type="text" formControlName='firstName'>
+    <label>Name
+      <input type="text" formControlName='name'>
     </label>
-    {{form.get('firstName').errors | json}}
-    <label>Last Name
-      <input type="text" formControlName='lastName'>
-    </label>
-    {{form.get('lastName').errors | json}}
+    {{form.get('name').errors | json}}
   </div>
   <button type='submit' [disabled]='form.invalid'>Register</button>
 </form>

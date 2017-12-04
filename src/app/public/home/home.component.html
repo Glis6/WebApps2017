@@ -1,7 +1,7 @@
-<app-canvas></app-canvas>
-
-<ul>
-  <li *ngFor="let drawing of drawings | async">
-    <app-view-drawing [drawing]="drawing"></app-view-drawing>
-  </li>
-</ul>
+<div class="row">
+  <div class="col-md-12">
+    <div *ngFor="let drawing of drawings | async">
+      <app-view-drawing [drawing]="drawing"></app-view-drawing>
+    </div>
+  </div>
+</div>

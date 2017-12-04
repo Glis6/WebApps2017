@@ -18,7 +18,6 @@ export class ApiUserService implements UserService {
   }
 
   getUser(id: string): Observable<User> {
-    console.log('Id: ' + id);
     return this.http.get(`${this._url}/${id}`)
       .map(res => res.json())
       .map(res => {

@@ -38,10 +38,9 @@ export interface AuthenticationService {
    *
    * @param {string} emailAddress The e-mail address to register.
    * @param {string} password The password to authenticate with.
-   * @param {string} firstName The first name of the user.
-   * @param {string} lastName The last name of the user.
+   * @param {string} name The first name of the user.
    */
-  register(emailAddress: string, password: string, firstName: string, lastName: string): Observable<boolean>;
+  register(emailAddress: string, password: string, name: string): Observable<boolean>;
 
   /**
    * Checks if the given e-mail address is still available.

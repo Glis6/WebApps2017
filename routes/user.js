@@ -22,15 +22,12 @@ router.get('/:user', function (req, res) {
 });
 
 router.post('/register', function (req, res, next) {
-  if (!req.body.emailAddress || !req.body.password || !req.body.firstName || !req.body.lastName) {
+  if (!req.body.emailAddress || !req.body.password || !req.body.name) {
     return res.status(400).json({message: 'Please fill out all fields'});
   }
   var user = new User();
   user.emailAddress = req.body.emailAddress;
-  user.name = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName
-  };
+  user.name = req.body.name;
   user.setPassword(req.body.password);
   user.save(function (err, post) {
     if (err) {
@@ -47,6 +44,7 @@ router.post('/login', function (req, res, next) {
   if (!req.body.emailAddress || !req.body.password) {
     return res.status(400).json({message: 'Please fill out all fields'});
   }
+  req.body.username = req.body.emailAddress;
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       return next(err);

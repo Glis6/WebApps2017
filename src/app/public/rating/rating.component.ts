@@ -19,6 +19,12 @@ export class RatingComponent {
   public upVote: EventEmitter<void> = new EventEmitter<void>();
 
   /**
+   * Whether or not the user has up voted.
+   */
+  @Input()
+  public upVoted: boolean = false;
+
+  /**
    * The amount of down votes.
    */
   @Input()
@@ -29,6 +35,12 @@ export class RatingComponent {
    */
   @Output('addDownVote')
   public downVote: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
+   * Whether or not the user has up voted.
+   */
+  @Input()
+  public downVoted: boolean = false;
 
   /**
    * Gives an up vote.

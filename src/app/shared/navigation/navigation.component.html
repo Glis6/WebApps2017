@@ -1,5 +1,52 @@
-<div *ngIf="user; else notLoggedIn">Hello, {{user.firstName}} <a (click)="logout()">LOG OUT</a></div>
-<ng-template #notLoggedIn>
-  <div routerLink="/login">Log in</div>
-  <div routerLink="/register">Register</div>
+<app-alert></app-alert>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/home">
+      <h1>Draw it!</h1>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div *ngIf="!user; then notLoggedInHeader else loggedInHeader">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<ng-template #defaultHeader>
+  <li class="nav-item">
+    <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+  </li>
 </ng-template>
+
+<ng-template #notLoggedInHeader>
+  <ul class="navbar-nav ml-auto">
+    <li *ngIf="true; then defaultHeader"></li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/login" routerLinkActive="active">Log in</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
+    </li>
+  </ul>
+</ng-template>
+
+
+<ng-template #loggedInHeader>
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      <a class="nav-link">Welcome, {{ user.name }}</a>
+    </li>
+    <li *ngIf="true; then defaultHeader"></li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/portfolio">Portfolio</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home" (click)="logout()">Log off</a>
+    </li>
+  </ul>
+</ng-template>
+
