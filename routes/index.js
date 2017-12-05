@@ -1,8 +1,11 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
+let jwt = require('express-jwt');
 
-let Drawing = mongoose.model('Drawing');
+const Drawing = mongoose.model('Drawing');
+
+const auth = jwt({secret: process.env.BACKEND_SECRET, userProperty: 'payload'});
 
 router.param('drawing', function (req, res, next, id) {
   Drawing.findById(id).exec(function (err, drawing) {
@@ -30,8 +33,15 @@ router.param('comment', function (req, res, next, id) {
   return next();
 });
 
-router.get('/API/drawings/:drawing', function (req, res) {
+router.get('/API/drawings/:drawing', auth, function (req, res) {
   res.json(req.drawing);
+});
+
+router.delete('/API/drawings/:drawingId', auth, function (req, res, next) {
+  Drawing.deleteOne({_id:  req.params.drawingId}, function (err) {
+    if (err) return next(err);
+    res.json({});
+  });
 });
 
 router.get('/API/drawings/', function (req, res, next) {
@@ -41,7 +51,7 @@ router.get('/API/drawings/', function (req, res, next) {
   });
 });
 
-router.get('/API/drawings/user/:user', function (req, res, next) {
+router.get('/API/drawings/user/:user', auth, function (req, res, next) {
   Drawing.find({ author: req.params.user }, function (err, drawings) {
     if (err)
       return next(err);
@@ -49,7 +59,7 @@ router.get('/API/drawings/user/:user', function (req, res, next) {
   });
 });
 
-router.post('/API/drawings/create', function (req, res, next) {
+router.post('/API/drawings/create', auth, function (req, res, next) {
   const drawing = new Drawing({
     name: req.body.name,
     author: req.body.author,
@@ -65,7 +75,7 @@ router.post('/API/drawings/create', function (req, res, next) {
   });
 });
 
-router.post('/API/drawings/:drawing/save', function (req, res, next) {
+router.post('/API/drawings/:drawing/save', auth, function (req, res, next) {
   const drawing = req.drawing;
   drawing.canvas = req.body.canvas;
   drawing.author = req.body.author;
@@ -80,7 +90,7 @@ router.post('/API/drawings/:drawing/save', function (req, res, next) {
 
 /* RATING */
 
-router.post('/API/drawings/:drawing/upvote/add', function (req, res, next) {
+router.post('/API/drawings/:drawing/upvote/add', auth, function (req, res, next) {
   const drawing = req.drawing;
   drawing.rating.upVotes.push(req.body);
   drawing.save(function (err, post) {
@@ -91,7 +101,7 @@ router.post('/API/drawings/:drawing/upvote/add', function (req, res, next) {
   });
 });
 
-router.post('/API/drawings/:drawing/upvote/remove', function (req, res, next) {
+router.post('/API/drawings/:drawing/upvote/remove', auth, function (req, res, next) {
   const drawing = req.drawing;
   drawing.rating.upVotes = drawing.rating.upVotes.filter(function (vote) {
     return vote.user != req.body.user;
@@ -105,7 +115,7 @@ router.post('/API/drawings/:drawing/upvote/remove', function (req, res, next) {
 })
 ;
 
-router.post('/API/drawings/:drawing/downvote/add', function (req, res, next) {
+router.post('/API/drawings/:drawing/downvote/add', auth, function (req, res, next) {
   const drawing = req.drawing;
   drawing.rating.downVotes.push(req.body);
   drawing.save(function (err, post) {
@@ -116,7 +126,7 @@ router.post('/API/drawings/:drawing/downvote/add', function (req, res, next) {
   });
 });
 
-router.post('/API/drawings/:drawing/downvote/remove', function (req, res, next) {
+router.post('/API/drawings/:drawing/downvote/remove', auth, function (req, res, next) {
   const drawing = req.drawing;
   drawing.rating.downVotes = drawing.rating.downVotes.filter(function (vote) {
     return vote.user != req.body.user;
@@ -131,10 +141,8 @@ router.post('/API/drawings/:drawing/downvote/remove', function (req, res, next) 
 
 /* COMMENTS */
 
-router.post('/API/drawings/:drawing/comment/add', function (req, res, next) {
+router.post('/API/drawings/:drawing/comment/add', auth, function (req, res, next) {
   const drawing = req.drawing;
-  console.log('Comment:');
-  console.log(req.body);
   drawing.comments.push(req.body);
   drawing.save(function (err, post) {
     if (err) {
@@ -144,7 +152,7 @@ router.post('/API/drawings/:drawing/comment/add', function (req, res, next) {
   });
 });
 
-router.post('/API/drawings/:drawing/comment/remove', function (req, res, next) {
+router.post('/API/drawings/:drawing/comment/remove', auth, function (req, res, next) {
   const drawing = req.drawing;
   drawing.comments = drawing.comments.filter(function (comment) {
     return comment.user != req.body.comment;
@@ -157,7 +165,7 @@ router.post('/API/drawings/:drawing/comment/remove', function (req, res, next) {
   });
 });
 
-router.post('/API/drawings/:drawing/comment/:comment/upvote/add', function (req, res, next) {
+router.post('/API/drawings/:drawing/comment/:comment/upvote/add', auth, function (req, res, next) {
   const drawing = req.drawing;
   const comment = req.comment;
   comment.rating.upVotes.push(req.body);
@@ -169,7 +177,7 @@ router.post('/API/drawings/:drawing/comment/:comment/upvote/add', function (req,
   });
 });
 
-router.post('/API/drawings/:drawing/comment/:comment/downvote/add', function (req, res, next) {
+router.post('/API/drawings/:drawing/comment/:comment/downvote/add', auth, function (req, res, next) {
   const drawing = req.drawing;
   const comment = req.comment;
   comment.rating.downVotes.push(req.body);
@@ -181,7 +189,7 @@ router.post('/API/drawings/:drawing/comment/:comment/downvote/add', function (re
   });
 });
 
-router.post('/API/drawings/:drawing/comment/:comment/upvote/remove', function (req, res, next) {
+router.post('/API/drawings/:drawing/comment/:comment/upvote/remove', auth, function (req, res, next) {
   const drawing = req.drawing;
   const comment = req.comment;
   comment.rating.upVotes = comment.rating.upVotes.filter(function (vote) {
@@ -195,7 +203,7 @@ router.post('/API/drawings/:drawing/comment/:comment/upvote/remove', function (r
   });
 });
 
-router.post('/API/drawings/:drawing/comment/:comment/downvote/remove', function (req, res, next) {
+router.post('/API/drawings/:drawing/comment/:comment/downvote/remove', auth, function (req, res, next) {
   const drawing = req.drawing;
   const comment = req.comment;
   comment.rating.downVotes = comment.rating.downVotes.filter(function (vote) {

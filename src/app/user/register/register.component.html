@@ -1,18 +1,42 @@
-<form [formGroup]='form' (ngSubmit)='onSubmit()'>
-  <h3>Register a user</h3>
-  <div>
-    <label>E-mail address
-      <input type="text" formControlName='emailAddress'>
-    </label>
-    {{form.get('emailAddress').errors | json}}
-    <label>Password
-      <input type="password" formControlName='password'>
-    </label>
-    {{form.get('password').errors | json}}
-    <label>Name
-      <input type="text" formControlName='name'>
-    </label>
-    {{form.get('name').errors | json}}
+<div class="row justify-content-center align-items-center">
+  <div class="offset-md-2 col-md-8">
+    <form [formGroup]='form' (ngSubmit)='onSubmit()'>
+      <app-message></app-message>
+      <h3>Register a user</h3>
+      <div>
+        <div class="form-group">
+          <label>E-mail address
+            <input type="text" class="form-control" formControlName='emailAddress'>
+          </label>
+          <div class="alert alert-danger"
+               *ngIf="form.get('emailAddress') && form.get('emailAddress').touched && form.get('emailAddress').errors as errors">
+            <span *ngIf="errors.emailTaken">This e-mail address is already in use. If this is you, then please <a routerLink="/login">log in here</a>.</span>
+            <span *ngIf="errors.required">You have to fill in an e-mail address</span>
+            <span *ngIf="errors.email && form.get('emailAddress').value">This e-mail address is invalid.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password
+            <input type="password" class="form-control" formControlName='password'>
+          </label>
+          <div class="alert alert-danger"
+               *ngIf="form.get('password') && form.get('password').touched && form.get('password').errors as errors">
+            <span *ngIf="errors.required">You have to fill in a password.</span>
+            <span *ngIf="errors.minlength">Your password has to be at least {{errors.minlength.requiredLength}} characters long.</span>
+            <span *ngIf="errors.maxlength">Your password may not be longer than {{errors.maxlength.requiredLength}} characters.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nickname
+            <input type="text" class="form-control" formControlName='name'>
+          </label>
+          <div class="alert alert-danger"
+               *ngIf="form.get('name') && form.get('name').touched && form.get('name').errors as errors">
+            <span *ngIf="errors.required">You have to fill in a nickname.</span>
+          </div>
+        </div>
+      </div>
+      <button type='submit' class="btn btn-info" [disabled]='form.invalid'>Register</button>
+    </form>
   </div>
-  <button type='submit' [disabled]='form.invalid'>Register</button>
-</form>
+</div>

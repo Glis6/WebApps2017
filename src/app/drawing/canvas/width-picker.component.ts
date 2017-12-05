@@ -2,7 +2,7 @@ import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-width-picker',
-  template: `<input type="number" [(ngModel)]="currentNumber" (click)="applyColor()">`,
+  template: `<input type="number" class="form-control" [(ngModel)]="currentNumber" (click)="applyColor()">`,
   styles: ['']
 })
 export class WidthPickerComponent {
@@ -15,7 +15,7 @@ export class WidthPickerComponent {
   /**
    * The number that is currently picked.
    */
-  public currentNumber: number;
+  public currentNumber: number = 1;
 
   /**
    * Applies the number after picking.

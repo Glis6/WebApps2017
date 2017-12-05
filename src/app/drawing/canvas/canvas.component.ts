@@ -14,39 +14,24 @@ import {Rating} from "../../shared/models/rating.class";
 import {AUTHENTICATION_SERVICE, AuthenticationService} from "../../shared/services/authentication.service";
 import {UserModule} from "../../user/user.module";
 import {User} from "../../shared/models/user.class";
+import {MessageService} from "../../shared/services/message.service";
+import {AlertService} from "../../shared/services/alert.service";
 
 @Component({
   selector: 'app-canvas',
-  template: `
-    <canvas #canvas [style.background]="backgroundColor"></canvas>
-    <app-color-picker (color)="changeColor($event)"></app-color-picker>
-    <app-width-picker (number)="changeWidth($event)"></app-width-picker>
-    <button (click)="clearCanvas()">Clear</button>
-  `,
+  templateUrl: './canvas.component.html',
   styles: [`
     canvas {
       border: 1px solid #000;
     }
   `]
 })
-export class CanvasComponent implements OnInit, AfterViewInit {
+export class CanvasComponent implements AfterViewInit {
   /**
    * The canvas itself.
    */
   @ViewChild('canvas')
   public canvas: ElementRef;
-
-  /**
-   * The width of the canvas.
-   */
-  @Input()
-  public width = 400;
-
-  /**
-   * The height of the canvas.
-   */
-  @Input()
-  public height = 400;
 
   /**
    * The canvas URL.
@@ -71,20 +56,21 @@ export class CanvasComponent implements OnInit, AfterViewInit {
   private renderingContext: CanvasRenderingContext2D;
 
   /**
-   * The user that is currently logged in.
+   * The width of the canvas.
    */
-  private user: User;
+  @Input()
+  public width: number = 750;
 
   /**
-   * @param {DrawingService} drawingService The drawingService to save and load the drawing.
-   * @param {AuthenticationService} authenticationService The authenticationService to get the user from.
+   * The height of the canvas.
    */
-  constructor(@Inject(DRAWING_SERVICE) private drawingService: DrawingService,
-              @Inject(AUTHENTICATION_SERVICE) private authenticationService: AuthenticationService) {
-  }
+  @Input()
+  public height: number = 750;
 
-  ngOnInit() {
-    this.authenticationService.user.subscribe(user => this.user = user);
+  /**
+   * @param {AlertService} alertService The alertService to display alerts with.
+   */
+  constructor(private alertService: AlertService) {
   }
 
   /**
@@ -92,21 +78,19 @@ export class CanvasComponent implements OnInit, AfterViewInit {
    */
   ngAfterViewInit() {
     const canvasElement: HTMLCanvasElement = this.canvas.nativeElement;
-    if(this.beginCanvas) {
+    if (this.beginCanvas) {
       const img = new Image();
       img.addEventListener("load", function () {
         canvasElement.getContext("2d").drawImage(img, 0, 0);
       });
       img.setAttribute("src", this.beginCanvas);
+      this.canvasUrl.emit(this.beginCanvas);
     }
     this.renderingContext = canvasElement.getContext('2d');
 
-    canvasElement.width = this.width;
-    canvasElement.height = this.height;
-
     this.renderingContext.lineWidth = 3;
     this.renderingContext.lineCap = 'round';
-    this.renderingContext.strokeStyle = '#000';
+    this.renderingContext.strokeStyle = '#000000';
 
     this.captureEvents(canvasElement);
   }
@@ -154,19 +138,14 @@ export class CanvasComponent implements OnInit, AfterViewInit {
     this.canvasUrl.emit(this.renderingContext.canvas.toDataURL());
   }
 
-  save() {
-    if (this.user) {
-      this.drawingService.createDrawing(new Drawing('Test', this.user.id, this.renderingContext.canvas.toDataURL())).subscribe();
-    }
-  }
-
   /**
    * Changes the color.
    *
    * @param {string} color The color to change the line to.
    */
   changeColor(color: string) {
-    this.renderingContext.strokeStyle = color;
+    if (this.renderingContext)
+      this.renderingContext.strokeStyle = color;
   }
 
   /**
@@ -175,13 +154,54 @@ export class CanvasComponent implements OnInit, AfterViewInit {
    * @param {number} width The width to use.
    */
   changeWidth(width: number) {
-    this.renderingContext.lineWidth = width;
+    if (this.renderingContext)
+      this.renderingContext.lineWidth = width;
   }
 
   /**
    * Clears the canvas.
    */
   clearCanvas() {
-    this.renderingContext.clearRect(0, 0, this.width, this.height);
+    this.alertService.confirmation('Are you sure you want to clear the canvas? This cannot be undone.',
+      {
+        label: 'No',
+        onClick: () => {
+        }
+      },
+      {
+        label: 'Yes',
+        onClick: () => {
+          const canvasElement: HTMLCanvasElement = this.canvas.nativeElement;
+          this.renderingContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+          this.canvasUrl.emit(this.renderingContext.canvas.toDataURL());
+        }
+      });
+  }
+
+  /**
+   * Clears the canvas.
+   */
+  resetToInitial() {
+    if (!this.beginCanvas)
+      return;
+    this.alertService.confirmation('Are you sure you want to reset to the initial canvas? This cannot be undone.',
+      {
+        label: 'No',
+        onClick: () => {
+        }
+      },
+      {
+        label: 'Yes',
+        onClick: () => {
+          const canvasElement: HTMLCanvasElement = this.canvas.nativeElement;
+          this.renderingContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
+          const img = new Image();
+          img.addEventListener("load", function () {
+            canvasElement.getContext("2d").drawImage(img, 0, 0);
+          });
+          img.setAttribute("src", this.beginCanvas);
+          this.canvasUrl.emit(this.beginCanvas);
+        }
+      });
   }
 }

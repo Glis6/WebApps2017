@@ -8,7 +8,7 @@ import {MessageService} from "../../shared/services/message.service";
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
   /**
@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
    */
   ngOnInit() {
     this.form = this.formBuilder.group({
-      emailAddress: ['', [Validators.required, Validators.minLength(4), EmailAddressAvailableValidator.create]],
+      emailAddress: ['', [Validators.required, Validators.email], [EmailAddressAvailableValidator.create(this.authenticationService)]],
       password: ['', [Validators.required, Validators.minLength(12), Validators.maxLength(40)]],
       name: ['', [Validators.required]]
     });

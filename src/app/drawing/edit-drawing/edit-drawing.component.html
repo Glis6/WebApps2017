@@ -1,3 +1,20 @@
-<app-message></app-message>
-<app-canvas *ngIf="drawing" [beginCanvas]="drawing.canvas" (canvasUrl)="canvasUrl = $event"></app-canvas>
-<button class="btn btn-info" (click)="saveChanges()">Save changes</button>
+<div *ngIf="form" class="card">
+  <app-message></app-message>
+  <form [formGroup]='form' (ngSubmit)='saveChanges()' class="card-body">
+    <div class="form-group">
+      <label>Name
+        <input type="text" class="form-control" style="width: 100%" formControlName='name'>
+      </label>
+      <div class="alert alert-danger"
+           *ngIf="form.get('name') && form.get('name').touched && form.get('name').errors as errors">
+        <span *ngIf="errors.required">You have to fill in a name for the drawing.</span>
+        <span *ngIf="errors.maxlength">The name of the drawing can be at most {{errors.maxlength.requiredLength}} characters.</span>
+      </div>
+    </div>
+    <button class="btn btn-info" [disabled]="form.invalid">Save</button>
+  </form>
+</div>
+<hr>
+<div class="row">
+  <app-canvas *ngIf="drawing" [beginCanvas]="drawing.canvas" (canvasUrl)="canvasUrl = $event"></app-canvas>
+</div>

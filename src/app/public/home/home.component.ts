@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   /**
    * All drawings to display on the home page.
    */
-  public drawings: Observable<Drawing[]>;
+  public drawings: Drawing[];
 
   /**
    * The currently logged in user.
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.drawings = this.drawingService.getAll();
+    this.drawingService.getAll().subscribe(drawings => this.drawings = drawings.sort((a, b) => (b.upVotes - b.downVotes) - (a.upVotes - a.downVotes)));
     this.authenticationService.user.subscribe(user => this.user = user);
   }
 }

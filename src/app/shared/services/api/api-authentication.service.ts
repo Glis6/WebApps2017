@@ -93,6 +93,6 @@ export class ApiAuthenticationService implements AuthenticationService {
   emailAddressAvailable(emailAddress: string): Observable<boolean> {
     return this.http.post(`${this._url}/emailaddresstaken`, {emailAddress: emailAddress})
       .map(res => res.json())
-      .map(item => item.username !== 'taken');
+      .map(item => item.emailAddress != 'taken');
   }
 }

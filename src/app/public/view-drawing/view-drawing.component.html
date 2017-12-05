@@ -16,11 +16,11 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-6">
-        <img [src]="drawing.canvas" class="img-fluid">
+        <img [src]="drawing.canvas" class="img-fluid" style="width:100%">
       </div>
       <div class="col-md-6">
         <div class="card">
-          <div class="list-group list-group-flush list-scrollable" *ngIf="drawing.comments.length > 0; else noComments">
+          <div class="list-group list-group-flush list-scrollable">
             <div *ngFor="let comment of drawing.comments" class="list-group-item">
               <div class="card-body">
                 <div class="row col-md-12">
@@ -43,19 +43,22 @@
                 </div>
               </div>
             </div>
+            <div class="list-group-item" *ngIf="drawing.comments.length <= 0">
+              <div class="card-body">
+                <div class="row col-md-12">
+                  <p class="text-muted" *ngIf="user">There are no comments yet. Will you leave the first one?</p>
+                  <ng-template #notLoggedIn>
+                    <p class="text-muted">Log in <a routerLink="/login">here</a> to leave a comment!</p>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="card" *ngIf="user">
-          <app-comment class="card-body" (comment)="addComment($event)"></app-comment>
+          <div class="card" *ngIf="user">
+            <app-comment class="card-body" (comment)="addComment($event)"></app-comment>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<ng-template #noComments>
-  <p *ngIf="user">There are no comments yet. Will you leave the first one?</p>
-  <ng-template #notLoggedIn>
-    <p>Log in <a routerLink="/login">here</a> to leave a comment!</p>
-  </ng-template>
-</ng-template>

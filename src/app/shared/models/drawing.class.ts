@@ -38,6 +38,10 @@ export class Drawing {
     return this._name;
   }
 
+  set name(name: string) {
+    this._name = name;
+  }
+
   /**
    * @returns {string} The author of the drawing.
    */
@@ -65,7 +69,7 @@ export class Drawing {
   }
 
   get comments(): Comment[] {
-    return this._comments;
+    return this._comments.sort((a, b) => (b.upVotes - b.downVotes) - (a.upVotes - a.downVotes));
   }
 
   /* VOTES */

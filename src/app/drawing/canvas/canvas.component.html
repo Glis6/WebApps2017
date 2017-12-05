@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-md-9 container-fluid">
+    <canvas #canvas [style.background]="backgroundColor" [width]="width" [height]="height"></canvas>
+  </div>
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-header">
+        <h3>Toolbox</h3>
+      </div>
+      <div class="card-body">
+        <div>
+          <strong>Color</strong>
+          <app-color-picker [colorCode]="'#000000'" (color)="changeColor($event)"></app-color-picker>
+        </div>
+        <hr>
+        <div>
+          <strong>Line width</strong>
+          <app-width-picker (number)="changeWidth($event)"></app-width-picker>
+        </div>
+        <hr>
+        <div class="row" *ngIf="beginCanvas; else clear">
+          <div class="btn-group col-md-12">
+            <button style="width: 100%" class="btn btn-danger" (click)="clearCanvas()">Clear</button>
+            <button style="width: 100%" class="btn btn-danger" (click)="resetToInitial()">Reset</button>
+          </div>
+        </div>
+        <ng-template #clear>
+          <div class="row">
+            <button style="width: 100%" class="btn btn-danger" (click)="clearCanvas()">Clear</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

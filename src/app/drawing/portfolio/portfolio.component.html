@@ -1,3 +1,4 @@
+<app-message></app-message>
 <div class="card">
   <div class="card-header">
     <h4>Overview of your drawings
@@ -5,8 +6,8 @@
               title="Create"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </h4>
   </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item ">
+  <div class="list-group list-group-flush">
+    <div class="list-group-item">
       <div class="row">
         <div class="col-md-2">
           <strong>Preview</strong>
@@ -26,31 +27,39 @@
         <div class="col-md-1">
         </div>
       </div>
-    </li>
-    <li class="list-group-item" *ngFor="let drawing of drawings">
-      <div class="row">
-        <div class="col-md-2">
-          <img [src]="drawing.canvas" class="img-fluid">
-        </div>
-        <div class="col-md-3">
-          {{drawing.name}}
-        </div>
-        <div class="col-md-2">
-          {{drawing.rating?.upVotes?.length || 0}}
-        </div>
-        <div class="col-md-2">
-          {{drawing.rating?.downVotes?.length || 0}}
-        </div>
-        <div class="col-md-1">
-          {{drawing.comments?.length || 0}}
-        </div>
-        <div class="col-md-2">
-          <button [routerLink]="'edit/' + drawing.id" class="btn btn-info" data-toggle="tooltip" data-placement="top"
-                  title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-          <button class="btn btn-danger" data-toggle="tooltip" data-placement="top"
-                  title="Remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+    </div>
+    <div *ngIf="drawings?.length > 0; else noDrawings">
+      <div class="list-group-item" *ngFor="let drawing of drawings">
+        <div class="row">
+          <div class="col-md-2">
+            <img [src]="drawing.canvas" class="img-fluid">
+          </div>
+          <div class="col-md-3">
+            {{drawing.name}}
+          </div>
+          <div class="col-md-2">
+            {{drawing.upVotes || 0}}
+          </div>
+          <div class="col-md-2">
+            {{drawing.downVotes || 0}}
+          </div>
+          <div class="col-md-1">
+            {{drawing.comments?.length || 0}}
+          </div>
+          <div class="col-md-2">
+            <button [routerLink]="'edit/' + drawing.id" class="btn btn-info" data-toggle="tooltip" data-placement="top"
+                    title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            <button (click)="removeDrawing(drawing)" class="btn btn-danger" data-toggle="tooltip" data-placement="top"
+                    title="Remove"><i class="fa fa-trash" aria-hidden="true"></i></button>
+          </div>
         </div>
       </div>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>
+
+<ng-template #noDrawings>
+  <div class="list-group-item ">
+    <p class="text-muted">There are no drawing yet... Click <a routerLink="create">here</a> to create the first one!</p>
+  </div>
+</ng-template>

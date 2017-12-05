@@ -62,11 +62,11 @@ router.post('/login', function (req, res, next) {
 
 router.post('/emailaddresstaken', function (req, res, next) {
   if (req.body.emailAddress) {
-    User.find({username: req.body.emailAddress}, function (err, result) {
-      if (result.length) {
-        res.json({'username': 'taken'})
+    User.find({emailAddress: req.body.emailAddress}, function (err, result) {
+      if (result.length > 0) {
+        res.json({'emailAddress': 'taken'})
       } else {
-        res.json({'username': 'ok'})
+        res.json({'emailAddress': 'ok'})
       }
     });
   }

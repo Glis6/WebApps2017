@@ -16,6 +16,8 @@ export interface DrawingService {
 
   getDrawingsForUser(user: string): Observable<Drawing[]>;
 
+  removeDrawing(drawing: Drawing): Observable<void>;
+
   createDrawing(drawing: Drawing): Observable<Drawing>;
 
   saveDrawing(drawing: Drawing): Observable<Drawing>;

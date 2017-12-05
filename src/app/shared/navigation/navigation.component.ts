@@ -25,12 +25,10 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.user.subscribe(user => {
       this.user = user;
-      console.log('Set new user as ' + user && user != null ? user.toJSON() : 'null');
     });
   }
 
   logout() {
     this.authenticationService.logout();
-    console.log("Logged out");
   }
 }
