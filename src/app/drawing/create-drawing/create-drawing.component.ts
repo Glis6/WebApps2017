@@ -6,6 +6,7 @@ import {Drawing} from "../../shared/models/drawing.class";
 import {User} from "../../shared/models/user.class";
 import {AUTHENTICATION_SERVICE, AuthenticationService} from "../../shared/services/authentication.service";
 import {Subscription} from "rxjs/Subscription";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-create-drawing',
@@ -33,11 +34,13 @@ export class CreateDrawingComponent implements OnInit {
    * @param drawingService The drawingService to use to save the drawing.
    * @param router The router to use to redirect after saving.
    * @param authenticationService The authenticationService to provide the currently logged in user.
+   * @param location The location to go back to.
    */
   constructor(private formBuilder: FormBuilder,
               @Inject(DRAWING_SERVICE) private drawingService: DrawingService,
               private router: Router,
-              @Inject(AUTHENTICATION_SERVICE) private authenticationService: AuthenticationService) {
+              @Inject(AUTHENTICATION_SERVICE) private authenticationService: AuthenticationService,
+              public location: Location) {
 
   }
 

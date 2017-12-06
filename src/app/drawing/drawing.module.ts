@@ -7,13 +7,11 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import {SharedModule} from "../shared/shared.module";
 import { EditDrawingComponent } from './edit-drawing/edit-drawing.component';
 import { CreateDrawingComponent } from './create-drawing/create-drawing.component';
-import {RouterModule} from "@angular/router";
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule,
-    RouterModule
+    SharedModule
   ],
   declarations: [
     CanvasComponent,

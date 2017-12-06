@@ -5,6 +5,7 @@ import {DRAWING_SERVICE, DrawingService} from "../../shared/services/drawing.ser
 import {MessageService} from "../../shared/services/message.service";
 import {Subscription} from "rxjs/Subscription";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-edit-drawing',
@@ -30,7 +31,8 @@ export class EditDrawingComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               @Inject(DRAWING_SERVICE) private drawingService: DrawingService,
               private messageService: MessageService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              public location: Location) {
   }
 
   ngOnInit() {

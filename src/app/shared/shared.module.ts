@@ -14,6 +14,7 @@ import {AUTHENTICATION_SERVICE} from "./services/authentication.service";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ApiUserService} from "./services/api/api-user.service";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     DisplayUserComponent,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    RouterModule
   ],
   providers: [
     { provide: DRAWING_SERVICE, useClass: ApiDrawingService },
