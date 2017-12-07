@@ -1,12 +1,12 @@
 require('dotenv').config({path: './app.env'});
 
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var passport = require('passport');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
 
 require('./models/Drawing');
 require('./models/User');
@@ -14,10 +14,10 @@ require('./config/passport');
 
 mongoose.connect(process.env.DATABASE_URL, {useMongoClient: true});
 
-var index = require('./routes/index');
-var user = require('./routes/user');
+const index = require('./routes/index');
+const user = require('./routes/user');
 
-var app = express();
+const app = express();
 
 
 // view engine setup
@@ -43,7 +43,7 @@ app.all('*', function (req, res) {
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
